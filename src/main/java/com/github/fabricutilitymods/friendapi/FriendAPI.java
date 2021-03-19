@@ -8,15 +8,17 @@ public final class FriendAPI implements ModInitializer {
 
     public static final Logger LOGGER = LogManager.getLogger("FriendAPI");
 
+    public static final FriendManager MANAGER = new FriendManager();
+
     @Override
     public void onInitialize() {
         long start = System.currentTimeMillis();
 
         LOGGER.info("Using FriendAPI v1.0");
 
-        FriendManager.INSTANCE.init();
+        MANAGER.load();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(FriendManager.INSTANCE::save));
+        Runtime.getRuntime().addShutdownHook(new Thread(MANAGER::save));
 
         LOGGER.info("FriendAPI started in " + (System.currentTimeMillis() - start) + "ms");
     }
