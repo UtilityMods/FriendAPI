@@ -54,10 +54,9 @@ public final class FriendManager {
         return new HashMap<>(FRIENDS);
     }
 
-    public FriendData addFriend(UUID uuid, String name, FriendType friendType) {
-        FriendData data = new FriendData(name, friendType);
+    public FriendData addFriend(UUID uuid, FriendData data) {
         FRIENDS.put(uuid, data);
-        return data;
+        return FRIENDS.get(uuid);
     }
 
     public FriendData getFriendData(UUID uuid){
@@ -65,14 +64,12 @@ public final class FriendManager {
     }
 
     public boolean removeFriend(UUID uuid) {
-        boolean exists = FRIENDS.containsKey(uuid);
         FRIENDS.remove(uuid);
-        return exists;
+        return FRIENDS.containsKey(uuid);
     }
 
     public boolean isFriend(UUID uuid) {
         FriendType type = FRIENDS.get(uuid).friendType;
-        return type == FriendType.FRIEND
-                || type == FriendType.BEST_FRIEND;
+        return type == FriendType.FRIEND || type == FriendType.BEST_FRIEND;
     }
 }

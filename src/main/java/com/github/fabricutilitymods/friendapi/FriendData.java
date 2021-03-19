@@ -1,12 +1,14 @@
 package com.github.fabricutilitymods.friendapi;
 
+import java.util.UUID;
+
 public final class FriendData {
 
-    public String name;
+    public UUID uuid;
     public FriendType friendType;
 
-    public FriendData(String name, FriendType friendType) {
-        this.name = name;
+    public FriendData(UUID uuid, FriendType friendType) {
+        this.uuid = uuid;
         this.friendType = friendType;
     }
 }
