@@ -4,8 +4,10 @@
   "version": "${version}",
   "name": "FriendAPI",
   "description": "",
-  "authors": [],
-  "contact": {},
+  "authors": ["Fabric Utility Mods"],
+  "contact": {
+    "sources": "https://github.com/Fabric-Utility-Mods/Universal-Friends-API"
+  },
   "license": "Apache-2.0",
   "icon": "assets/friendapi/icon.png",
   "environment": "client",
