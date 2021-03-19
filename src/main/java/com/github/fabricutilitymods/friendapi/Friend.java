@@ -1,27 +1,20 @@
 package com.github.fabricutilitymods.friendapi;
 
-import java.util.UUID;
+import com.mojang.authlib.GameProfile;
 
 public final class Friend implements FriendData {
 
-    public String name;
-    public UUID uuid;
+    public GameProfile gameProfile;
     public FriendType friendType;
 
-    public Friend(UUID uuid, String name, FriendType friendType) {
-        this.uuid = uuid;
-        this.name = name;
+    public Friend(GameProfile gameProfile, FriendType friendType) {
+        this.gameProfile = gameProfile;
         this.friendType = friendType;
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return uuid;
+    public GameProfile getProfile(){
+        return gameProfile;
     }
 
     @Override

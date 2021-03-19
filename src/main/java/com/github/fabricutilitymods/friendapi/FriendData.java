@@ -1,13 +1,13 @@
 package com.github.fabricutilitymods.friendapi;
 
+import com.mojang.authlib.GameProfile;
+
 import java.util.UUID;
 
 public interface FriendData {
 
-    String getName();
-
-    UUID getUUID();
-
     FriendType getType();
+
+    GameProfile getProfile();
 
 }
