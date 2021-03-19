@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "FriendAPI",
+  "version": "${version}",
+  "name": "FriendAPI",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "Apache-2.0",
+  "icon": "assets/FriendAPI/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "club.cafedevelopment.friendapi.friendapi.FriendAPI"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  }
+}
