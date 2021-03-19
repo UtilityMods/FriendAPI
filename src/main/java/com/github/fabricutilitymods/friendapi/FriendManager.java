@@ -15,12 +15,14 @@ import java.util.UUID;
 
 public final class FriendManager {
 
+    public static final FriendManager INSTANCE = new FriendManager();
+
     public final Logger LOGGER = LogManager.getLogger("FriendAPI");
 
     private final HashMap<UUID, Friend> FRIENDS = new HashMap<>();
     private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private final File FOLDER = new File(FabricLoader.getInstance().getGameDir().toString().replaceAll("\\.", "") + "FriendAPI/");
-    private final File FILE = new File(FOLDER, "Friends.json");
+    private final File FOLDER = new File(FabricLoader.getInstance().getGameDir().toString().replaceAll("\\.", "") + "friendapi/");
+    private final File FILE = new File(FOLDER, "friends.json");
 
     public void init(){
         long start = System.currentTimeMillis();
