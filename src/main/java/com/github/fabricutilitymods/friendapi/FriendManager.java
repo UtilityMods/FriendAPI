@@ -1,12 +1,9 @@
-package club.cafedevelopment.friendapi.friendapi;
+package com.github.fabricutilitymods.friendapi;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * @author yagel15637
- */
 public final class FriendManager {
     public static final FriendManager INSTANCE = new FriendManager();
 
@@ -54,7 +51,7 @@ public final class FriendManager {
     public boolean isFriend(UUID uuid) {
         for (Friend friend : friends) {
             if (friend.getUUID().equals(uuid))
-                return friend.getFriendType() == FriendType.FRIEND || friend.getFriendType() == FriendType.FRIEND_PLUS;
+                return friend.getFriendType() == FriendType.FRIEND || friend.getFriendType() == FriendType.BEST_FRIEND;
         }
 
         return false;

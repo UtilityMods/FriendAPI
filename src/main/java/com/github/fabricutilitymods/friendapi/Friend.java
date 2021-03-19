@@ -1,10 +1,7 @@
-package club.cafedevelopment.friendapi.friendapi;
+package com.github.fabricutilitymods.friendapi;
 
 import java.util.UUID;
 
-/**
- * @author yagel15637
- */
 public final class Friend {
     private final UUID uuid;
     private FriendType friendType;
