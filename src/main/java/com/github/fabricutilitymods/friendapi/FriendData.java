@@ -2,11 +2,12 @@ package com.github.fabricutilitymods.friendapi;
 
 import java.util.UUID;
 
-public final class Friend {
+public final class FriendData {
+
     private final UUID uuid;
     private FriendType friendType;
 
-    public Friend(UUID uuid, FriendType friendType) {
+    public FriendData(UUID uuid, FriendType friendType) {
         this.uuid = uuid;
         this.friendType = friendType;
     }

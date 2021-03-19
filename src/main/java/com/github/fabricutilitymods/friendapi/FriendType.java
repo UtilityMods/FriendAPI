@@ -2,7 +2,7 @@ package com.github.fabricutilitymods.friendapi;
 
 public enum FriendType {
     ENEMY,
-    NONE,
+    NEUTRAL,
     FRIEND,
     BEST_FRIEND
 }
