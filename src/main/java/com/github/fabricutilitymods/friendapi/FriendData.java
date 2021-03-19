@@ -4,11 +4,11 @@ import java.util.UUID;
 
 public final class FriendData {
 
-    public UUID uuid;
+    public String name;
     public FriendType friendType;
 
-    public FriendData(UUID uuid, FriendType friendType) {
-        this.uuid = uuid;
+    public FriendData(String name, FriendType friendType) {
+        this.name = name;
         this.friendType = friendType;
     }
 }

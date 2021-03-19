@@ -50,6 +50,10 @@ public final class FriendManager {
         }
     }
 
+    public HashMap<UUID, FriendData> getFriendMap() {
+        return FRIENDS;
+    }
+
     public HashMap<UUID, FriendData> getFriendMapCopy() {
         return new HashMap<>(FRIENDS);
     }
