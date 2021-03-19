@@ -23,9 +23,11 @@ public final class FriendManager {
     private final File FILE = new File(FOLDER, "Friends.json");
 
     public void load() {
-        if(!FOLDER.exists()) FOLDER.mkdirs();
+        if (!FOLDER.exists()) {
+            FOLDER.mkdirs();
+        }
         try {
-            if(FILE.exists()){
+            if (FILE.exists()) {
                 Reader reader = Files.newBufferedReader(FILE.toPath());
                 FRIENDS.putAll(
                         new Gson().fromJson(reader,
@@ -48,16 +50,29 @@ public final class FriendManager {
         }
     }
 
-    public FriendData getFriend(UUID uuid){
+    public HashMap<UUID, FriendData> getFriendMapCopy() {
+        return new HashMap<>(FRIENDS);
+    }
+
+    public FriendData addFriend(UUID uuid, String name, FriendType friendType) {
+        FriendData data = new FriendData(name, friendType);
+        FRIENDS.put(uuid, data);
+        return data;
+    }
+
+    public FriendData getFriendData(UUID uuid){
         return FRIENDS.get(uuid);
     }
 
-    public void removeFriend(UUID uuid) {
+    public boolean removeFriend(UUID uuid) {
+        boolean exists = FRIENDS.containsKey(uuid);
         FRIENDS.remove(uuid);
+        return exists;
     }
 
     public boolean isFriend(UUID uuid) {
-        return FRIENDS.get(uuid).getFriendType() == FriendType.FRIEND
-                || FRIENDS.get(uuid).getFriendType() == FriendType.BEST_FRIEND;
+        FriendType type = FRIENDS.get(uuid).friendType;
+        return type == FriendType.FRIEND
+                || type == FriendType.BEST_FRIEND;
     }
 }
