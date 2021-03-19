@@ -6,18 +6,20 @@ import com.google.gson.reflect.TypeToken;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.UUID;
 
 public final class FriendManager {
 
     public final Logger LOGGER = LogManager.getLogger("FriendAPI");
 
-    private final HashMap<UUID, FriendData> FRIENDS = new HashMap<>();
+    private final HashMap<UUID, Friend> FRIENDS = new HashMap<>();
     private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private final File FOLDER = new File(FabricLoader.getInstance().getGameDir().toString().replaceAll("\\.", "") + "FriendAPI/");
     private final File FILE = new File(FOLDER, "Friends.json");
@@ -31,7 +33,7 @@ public final class FriendManager {
                 Reader reader = Files.newBufferedReader(FILE.toPath());
                 FRIENDS.putAll(
                         new Gson().fromJson(reader,
-                        new TypeToken<HashMap<UUID, FriendData>>() {}.getType())
+                        new TypeToken<HashMap<UUID, Friend>>() {}.getType())
                 );
                 reader.close();
             }
@@ -50,20 +52,16 @@ public final class FriendManager {
         }
     }
 
-    public HashMap<UUID, FriendData> getFriendMap() {
-        return FRIENDS;
-    }
-
-    public HashMap<UUID, FriendData> getFriendMapCopy() {
+    public HashMap<UUID, Friend> getFriendMapCopy() {
         return new HashMap<>(FRIENDS);
     }
 
-    public FriendData addFriend(UUID uuid, FriendData data) {
+    public Friend addFriend(UUID uuid, Friend data) {
         FRIENDS.put(uuid, data);
         return FRIENDS.get(uuid);
     }
 
-    public FriendData getFriendData(UUID uuid){
+    public Friend getFriendData(UUID uuid){
         return FRIENDS.get(uuid);
     }
 
@@ -76,4 +74,5 @@ public final class FriendManager {
         FriendType type = FRIENDS.get(uuid).friendType;
         return type == FriendType.FRIEND || type == FriendType.BEST_FRIEND;
     }
+
 }
