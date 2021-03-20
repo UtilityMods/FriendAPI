@@ -1,29 +1,19 @@
 package com.github.fabricutilitymods.friendapi;
 
 import com.mojang.authlib.GameProfile;
+import org.jetbrains.annotations.NotNull;
 
-public final class Friend implements FriendData {
+public final class Friend {
 
     public GameProfile gameProfile;
-    public FriendType friendType;
+    public Long affinity;
 
-    public Friend(GameProfile gameProfile, FriendType friendType) {
+    public Friend(@NotNull GameProfile gameProfile, @NotNull Long affinity) {
         this.gameProfile = gameProfile;
-        this.friendType = friendType;
+        this.affinity = affinity;
     }
 
-    @Override
-    public GameProfile getProfile(){
-        return gameProfile;
-    }
-
-    @Override
-    public FriendType getType() {
-        return friendType;
-    }
-    
-    @Override
-    public void setType(FriendType friendType) {
-        this.friendType = friendType;
+    public static Friend getEmpty() {
+        return new Friend(new GameProfile(null, ""), 0L);
     }
 }
