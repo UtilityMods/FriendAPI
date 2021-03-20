@@ -27,7 +27,7 @@ public final class FriendManager {
     /**
      * The Logger.
      */
-    public final Logger LOGGER = LogManager.getLogger("FriendAPI");
+    private static final Logger LOGGER = LogManager.getLogger("FriendAPI");
 
     /**
      * A map of players' UUIDS to their friend class.
@@ -64,8 +64,7 @@ public final class FriendManager {
                 Reader reader = Files.newBufferedReader(FILE.toPath());
                 FRIENDS.putAll(
                         new Gson().fromJson(reader,
-                                new TypeToken<HashMap<UUID, Profile>>() {
-                                }.getType())
+                        new TypeToken<HashMap<UUID, Profile>>() {}.getType())
                 );
                 reader.close();
             }
@@ -105,7 +104,7 @@ public final class FriendManager {
      */
     @NotNull
     public Profile getFriend(@NotNull UUID uuid) {
-        return FRIENDS.getOrDefault(uuid, new Profile("unregistered", uuid, 0L));
+        return FRIENDS.getOrDefault(uuid, new Profile("empty", uuid, 0L));
     }
 
     /**
