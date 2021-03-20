@@ -1,17 +1,19 @@
 package com.github.fabricutilitymods.friendapi;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Type;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -61,12 +63,17 @@ public final class FriendManager {
         }
         try {
             if (FILE.exists()) {
-                Reader reader = Files.newBufferedReader(FILE.toPath());
-                FRIENDS.putAll(
-                        new Gson().fromJson(reader,
-                        new TypeToken<HashMap<UUID, Profile>>() {}.getType())
-                );
-                reader.close();
+                InputStream inputStream = Files.newInputStream(FILE.toPath());
+
+                JsonObject mainObject = new JsonParser().parse(new InputStreamReader(inputStream)).getAsJsonObject();
+                JsonArray friendObject = mainObject.get("Friends").getAsJsonArray();
+
+                friendObject.forEach(friend -> {
+                    String[] values = friend.getAsString().split(":");
+
+                    FRIENDS.put(UUID.fromString(values[0]), new Profile(values[1], UUID.fromString(values[2]), Long.getLong(values[3])));
+                });
+                inputStream.close();
             }
         } catch (Exception e) {
             LOGGER.fatal("Failed to load \"" + FILE.getAbsolutePath() + "\"!");
@@ -79,7 +86,13 @@ public final class FriendManager {
     public void save() {
         try {
             OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(FILE), StandardCharsets.UTF_8);
-            output.write(GSON.toJson(FRIENDS));
+            JsonObject jsonObject = new JsonObject();
+            JsonArray friendArray = new JsonArray();
+            for (Map.Entry<UUID, Profile> entry : FRIENDS.entrySet()) {
+                friendArray.add(entry.getKey().toString() + ":" + entry.getValue().name + ":" + entry.getValue().uuid + ":" + entry.getValue().affinity);
+            }
+            jsonObject.add("Friends", friendArray);
+            output.write(GSON.toJson(new JsonParser().parse(jsonObject.toString())));
             output.close();
         } catch (IOException e) {
             LOGGER.fatal("Failed to save \"" + FILE.getAbsolutePath() + "\"!");
