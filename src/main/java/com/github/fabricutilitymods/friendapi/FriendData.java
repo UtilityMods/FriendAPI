@@ -8,4 +8,9 @@ public interface FriendData {
 
     FriendType getType();
 
+    void setType(FriendType type);
+    
+    int getPriority();
+    
+    void setPriority(int priority);
 }
