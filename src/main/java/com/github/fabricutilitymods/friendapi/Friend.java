@@ -6,10 +6,18 @@ public final class Friend implements FriendData {
 
     public GameProfile gameProfile;
     public FriendType friendType;
+    public int priority;
 
     public Friend(GameProfile gameProfile, FriendType friendType) {
         this.gameProfile = gameProfile;
         this.friendType = friendType;
+        this.priority = 0;
+    }
+    
+    public Friend(GameProfile gameProfile, FriendType friendType, int priority) {
+        this.gameProfile = gameProfile;
+        this.friendType = friendType;
+        this.priority = priority;
     }
 
     @Override
