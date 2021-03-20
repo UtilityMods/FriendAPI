@@ -8,4 +8,6 @@ public interface FriendData {
 
     FriendType getType();
 
+    void setType(FriendType type);
+    
 }

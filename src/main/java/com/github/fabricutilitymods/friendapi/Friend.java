@@ -21,4 +21,9 @@ public final class Friend implements FriendData {
     public FriendType getType() {
         return friendType;
     }
+    
+    @Override
+    public void setType(FriendType friendType) {
+        this.friendType = friendType;
+    }
 }
