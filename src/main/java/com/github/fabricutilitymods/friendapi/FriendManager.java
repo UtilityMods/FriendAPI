@@ -32,7 +32,7 @@ public final class FriendManager {
     /**
      * A map of players' UUIDS to their friend class.
      */
-    private final HashMap<UUID, Friend> FRIENDS = new HashMap<>();
+    private final HashMap<UUID, Profile> FRIENDS = new HashMap<>();
     private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private final File FOLDER = new File(FabricLoader.getInstance().getGameDir().toString().replaceAll("\\.", "") + "friendapi/");
     private final File FILE = new File(FOLDER, "friends.json");
@@ -64,7 +64,7 @@ public final class FriendManager {
                 Reader reader = Files.newBufferedReader(FILE.toPath());
                 FRIENDS.putAll(
                         new Gson().fromJson(reader,
-                                new TypeToken<HashMap<UUID, Friend>>() {
+                                new TypeToken<HashMap<UUID, Profile>>() {
                                 }.getType())
                 );
                 reader.close();
@@ -93,7 +93,7 @@ public final class FriendManager {
      * @return a copy of the FRIENDS hashmap
      */
     @NotNull
-    public HashMap<UUID, Friend> getFriendMapCopy() {
+    public HashMap<UUID, Profile> getFriendMapCopy() {
         return new HashMap<>(FRIENDS);
     }
 
@@ -104,32 +104,20 @@ public final class FriendManager {
      * @return the friend
      */
     @NotNull
-    public Friend getFriend(UUID uuid) {
-        return FRIENDS.getOrDefault(uuid, Friend.getEmpty());
-    }
-
-    /**
-     * Gets a uuid from a Friend object.
-     *
-     * @param friend a Friend object
-     * @return the uuid of the Friend object's owner
-     */
-    @NotNull
-    public UUID getUUID(Friend friend) {
-        return friend.gameProfile.getId();
+    public Profile getFriend(@NotNull UUID uuid) {
+        return FRIENDS.getOrDefault(uuid, new Profile("unregistered", uuid, 0L));
     }
 
     /**
      * Add or replace a friend in the FRIENDS hashmap.
      *
-     * @param uuid the uuid of the player to register
-     * @param data the data of the player to register
+     * @param profile the profile of the player to register
      * @return the newly created friend
      */
     @NotNull
-    public Friend addFriend(UUID uuid, Friend data) {
-        FRIENDS.put(uuid, data);
-        return getFriend(uuid);
+    public Profile addFriend(Profile profile) {
+        FRIENDS.put(profile.uuid, profile);
+        return getFriend(profile.uuid);
     }
 
     /**
@@ -137,7 +125,7 @@ public final class FriendManager {
      *
      * @param uuid the uuid of the friend to remove
      */
-    public void removeFriend(UUID uuid) {
+    public void removeFriend(@NotNull UUID uuid) {
         FRIENDS.remove(uuid);
     }
 
@@ -148,7 +136,7 @@ public final class FriendManager {
      * @return the registered friend type
      */
     @NotNull
-    public Long getAffinity(UUID uuid) {
+    public Long getAffinity(@NotNull UUID uuid) {
         return getFriend(uuid).affinity;
     }
 
@@ -158,7 +146,7 @@ public final class FriendManager {
      * @param uuid the uuid of the player
      * @return whether the player queried is a registered friend
      */
-    public boolean isFriend(UUID uuid) {
+    public boolean isFriend(@NotNull UUID uuid) {
         return getAffinity(uuid) > 0L;
     }
 
@@ -168,7 +156,7 @@ public final class FriendManager {
      * @param uuid the uuid of the player
      * @return whether the player queried is a registered enemy
      */
-    public boolean isEnemy(UUID uuid) {
+    public boolean isEnemy(@NotNull UUID uuid) {
         return getAffinity(uuid) < 0L;
     }
 
@@ -178,7 +166,7 @@ public final class FriendManager {
      * @param uuid the uuid of the player
      * @return whether the player queried is neutral or unregistered
      */
-    public boolean isNeutral(UUID uuid) {
+    public boolean isNeutral(@NotNull UUID uuid) {
         return getAffinity(uuid) == 0L;
     }
 
