@@ -16,9 +16,4 @@ public final class Friend {
     public static Friend getEmpty() {
         return new Friend(new GameProfile(null, ""), 0L);
     }
-    
-    @Override
-    public void setType(FriendType friendType) {
-        this.friendType = friendType;
-    }
 }
