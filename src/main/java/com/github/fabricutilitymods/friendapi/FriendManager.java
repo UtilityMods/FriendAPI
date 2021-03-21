@@ -27,6 +27,11 @@ public final class FriendManager {
     public static final FriendManager INSTANCE = new FriendManager();
 
     /**
+     * Mod Version
+     */
+    private static final String VERSION = "v1.2";
+
+    /**
      * The Logger.
      */
     private static final Logger LOGGER = LogManager.getLogger("FriendAPI");
@@ -35,8 +40,20 @@ public final class FriendManager {
      * A map of players' UUIDS to their friend class.
      */
     private final HashMap<UUID, Profile> FRIENDS = new HashMap<>();
+
+    /**
+     * Gson Instance
+     */
     private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+    /**
+     * Path to Json save location
+     */
     private final File FOLDER = new File(FabricLoader.getInstance().getGameDir().toString().replaceAll("\\.", "") + "friendapi/");
+
+    /**
+     * Path to Json file
+     */
     private final File FILE = new File(FOLDER, "friends.json");
 
     /**
@@ -45,7 +62,7 @@ public final class FriendManager {
     public void init() {
         long start = System.currentTimeMillis();
 
-        LOGGER.info("Using FriendAPI v1.0");
+        LOGGER.info("Using FriendAPI " + VERSION);
 
         load();
 
@@ -63,17 +80,10 @@ public final class FriendManager {
         }
         try {
             if (FILE.exists()) {
-                InputStream inputStream = Files.newInputStream(FILE.toPath());
-
-                JsonObject mainObject = new JsonParser().parse(new InputStreamReader(inputStream)).getAsJsonObject();
-                JsonArray friendObject = mainObject.get("Friends").getAsJsonArray();
-
-                friendObject.forEach(friend -> {
-                    String[] values = friend.getAsString().split(":");
-
-                    FRIENDS.put(UUID.fromString(values[0]), new Profile(values[1], UUID.fromString(values[2]), Long.getLong(values[3])));
-                });
-                inputStream.close();
+                Reader reader = Files.newBufferedReader(FILE.toPath());
+                Type type = new TypeToken<HashMap<UUID, Profile>>() {}.getType();
+                FRIENDS.putAll(GSON.fromJson(reader, type));
+                reader.close();
             }
         } catch (Exception e) {
             LOGGER.fatal("Failed to load \"" + FILE.getAbsolutePath() + "\"!");
@@ -86,13 +96,7 @@ public final class FriendManager {
     public void save() {
         try {
             OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(FILE), StandardCharsets.UTF_8);
-            JsonObject jsonObject = new JsonObject();
-            JsonArray friendArray = new JsonArray();
-            for (Map.Entry<UUID, Profile> entry : FRIENDS.entrySet()) {
-                friendArray.add(entry.getKey().toString() + ":" + entry.getValue().name + ":" + entry.getValue().uuid + ":" + entry.getValue().affinity);
-            }
-            jsonObject.add("Friends", friendArray);
-            output.write(GSON.toJson(new JsonParser().parse(jsonObject.toString())));
+            output.write(GSON.toJson(FRIENDS));
             output.close();
         } catch (IOException e) {
             LOGGER.fatal("Failed to save \"" + FILE.getAbsolutePath() + "\"!");
