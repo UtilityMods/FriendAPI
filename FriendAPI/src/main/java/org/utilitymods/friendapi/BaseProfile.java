@@ -8,6 +8,7 @@ import java.util.UUID;
  * Profile class to store attributes of a friend.
  */
 public class BaseProfile {
+
     /**
      * The name of the Player
      */
@@ -52,6 +53,5 @@ public class BaseProfile {
     public String toString() {
        return "Name: " + name + "\n" + "Uuid: " + uuid+ "\n"  + "Affinity: " + affinity + "\n";
     }
-
 
 }

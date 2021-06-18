@@ -5,8 +5,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
 public class Profile extends BaseProfile {
 
     /**
@@ -40,7 +38,7 @@ public class Profile extends BaseProfile {
     /**
      * Instantiates a new Profile provided name and uuid of friend.
      *
-     * @param gameProfile     the gameprofile of the friend
+     * @param gameProfile     the gameProfile of the friend
      * @param affinity        the affinity with the friend
      */
     public Profile(@NotNull GameProfile gameProfile, @NotNull Affinity affinity) {

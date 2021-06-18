@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.NotNull;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -13,7 +15,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
+import java.util.function.Function;
 
 /**
  * Main class and manager of the Friend API.
@@ -28,7 +30,7 @@ public final class FriendManager {
     /**
      * The Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    private static final Logger LOGGER = LogManager.getLogger("FriendAPI");
 
     /**
      * The constant INSTANCE of the friend manager.
@@ -84,7 +86,8 @@ public final class FriendManager {
                 reader.close();
             }
         } catch (Exception e) {
-            LOGGER.warning("Failed to load \"" + FILE.getAbsolutePath() + "\"!");
+            e.printStackTrace();
+            LOGGER.fatal("Failed to load \"" + FILE.getAbsolutePath() + "\"!");
         }
     }
 
@@ -119,7 +122,7 @@ public final class FriendManager {
      */
     @NotNull
     public BaseProfile getFriend(@NotNull UUID uuid) {
-        return FRIENDS.getOrDefault(uuid, new BaseProfile("empty", uuid, Affinity.NEUTRAL));
+        return FRIENDS.computeIfAbsent(uuid, k -> new BaseProfile("empty", uuid, Affinity.NEUTRAL));
     }
 
     /**
@@ -159,7 +162,8 @@ public final class FriendManager {
      * @return whether the player queried is a registered friend
      */
     public boolean isFriend(@NotNull UUID uuid) {
-        return getAffinity(uuid).type > 0;
+        System.out.println(getAffinity(uuid));
+        return getAffinity(uuid).type == Affinity.FRIEND.type;
     }
 
     /**
@@ -169,7 +173,7 @@ public final class FriendManager {
      * @return whether the player queried is a registered enemy
      */
     public boolean isEnemy(@NotNull UUID uuid) {
-        return getAffinity(uuid).type < 0;
+        return getAffinity(uuid) == Affinity.ENEMY;
     }
 
     /**
@@ -179,7 +183,7 @@ public final class FriendManager {
      * @return whether the player queried is neutral or unregistered
      */
     public boolean isNeutral(@NotNull UUID uuid) {
-        return getAffinity(uuid).type == 0;
+        return getAffinity(uuid).type < 2;
     }
 
 }

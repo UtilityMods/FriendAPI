@@ -1,22 +1,15 @@
 plugins {
     id 'fabric-loom' version '0.6-SNAPSHOT'
-    id 'java'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-repositories {
-    mavenCentral()
-}
+archivesBaseName = "FriendAPI-16"
 
 dependencies {
+    api project(':FriendAPI')
+
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    implementation rootProject
-
 }
 
 processResources {
@@ -27,16 +20,13 @@ processResources {
         expand "version": project.version
     }
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
-    }
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources"
-    from sourceSets.main.allSource
+java {
+    withSourcesJar()
 }
+

@@ -1,21 +1,21 @@
 plugins {
-    id 'java'
+    id 'java-library'
+    id 'maven-publish'
 }
 
 version = project.api_version
 group = project.maven_group
 
-repositories {
-    mavenCentral()
-}
 
-dependencies {
-    implementation 'org.jetbrains:annotations:16.0.2'
-    implementation 'com.google.code.gson:gson:2.8.7'
+allprojects {
+    apply plugin: "java-library"
+    apply plugin: "maven-publish"
 
-}
+    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
 
+    repositories {
+        mavenCentral()
+    }
 
-test {
-    useJUnitPlatform()
 }
