@@ -9,4 +9,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'Friend-API'
+rootProject.name = 'FriendAPI'
+include 'FriendAPI-16'

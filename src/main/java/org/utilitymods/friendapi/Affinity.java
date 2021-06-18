@@ -1,4 +1,4 @@
-package com.github.fabricutilitymods.friendapi;
+package org.utilitymods.friendapi;
 
 public enum Affinity {
 

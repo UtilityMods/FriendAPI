@@ -1,22 +1,19 @@
-package com.github.fabricutilitymods.friendapi;
+package org.utilitymods.friendapi;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.event.ActionListener;
-import java.lang.reflect.Type;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 /**
  * Main class and manager of the Friend API.
@@ -24,14 +21,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class FriendManager {
 
     /**
-     * Mod Version
+     * API Version
      */
-    private static final String VERSION = "v1.2";
+    private static final String VERSION = "1.0.0";
 
     /**
      * The Logger.
      */
-    private static final Logger LOGGER = LogManager.getLogger("FriendAPI");
+    private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     /**
      * The constant INSTANCE of the friend manager.
@@ -41,7 +38,7 @@ public final class FriendManager {
     /**
      * A map of players' UUIDS to their friend class.
      */
-    private ConcurrentHashMap<UUID, Profile> FRIENDS = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<UUID, BaseProfile> FRIENDS = new ConcurrentHashMap<>();
 
     /**
      * Gson Instance
@@ -51,17 +48,12 @@ public final class FriendManager {
     /**
      * TypeToken
      */
-    private final Type type = new TypeToken<ConcurrentHashMap<String, Profile>>(){}.getType();
-
-    /**
-     * Path to folder
-     */
-    private final Path FOLDER = FabricLoader.getInstance().getGameDir().resolve("friendapi");
+    private final Type type = new TypeToken<ConcurrentHashMap<String, BaseProfile>>(){}.getType();
 
     /**
      * Path to Json file
      */
-    private final File FILE = new File(FOLDER.toFile(), "friends.json");
+    private final File FILE = new File(System.getProperty("user.home"), ".friends.json");
 
     /**
      * Initializes the friend manager.
@@ -92,7 +84,7 @@ public final class FriendManager {
                 reader.close();
             }
         } catch (Exception e) {
-            LOGGER.fatal("Failed to load \"" + FILE.getAbsolutePath() + "\"!");
+            LOGGER.warning("Failed to load \"" + FILE.getAbsolutePath() + "\"!");
         }
     }
 
@@ -100,13 +92,6 @@ public final class FriendManager {
      * Saves the FRIENDS hashmap into friends.json.
      */
     public void save() {
-        if (!FOLDER.toFile().exists()) {
-            try {
-                Files.createDirectories(FOLDER);
-            } catch (IOException e) {
-                LOGGER.fatal("Failed to make \"" + FOLDER + "\"!");
-            }
-        }
         try {
             OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(FILE), StandardCharsets.UTF_8);
             output.write(GSON.toJson(FRIENDS));
@@ -122,7 +107,7 @@ public final class FriendManager {
      * @return a copy of the FRIENDS hashmap
      */
     @NotNull
-    public Map<UUID, Profile> getFriendMapCopy() {
+    public Map<UUID, BaseProfile> getFriendMapCopy() {
         return Collections.unmodifiableMap(FRIENDS) ;
     }
 
@@ -133,8 +118,8 @@ public final class FriendManager {
      * @return the friend
      */
     @NotNull
-    public Profile getFriend(@NotNull UUID uuid) {
-        return FRIENDS.getOrDefault(uuid, new Profile("empty", uuid, Affinity.NEUTRAL));
+    public BaseProfile getFriend(@NotNull UUID uuid) {
+        return FRIENDS.getOrDefault(uuid, new BaseProfile("empty", uuid, Affinity.NEUTRAL));
     }
 
     /**
@@ -143,8 +128,8 @@ public final class FriendManager {
      * @param profile the profile of the player to register
      * @return the newly created friend
      */
-    public Profile addFriend(Profile profile) {
-          return FRIENDS.compute(profile.uuid, ((uuid, profile1) -> profile1 = profile));
+    public BaseProfile addFriend(BaseProfile profile) {
+        return FRIENDS.compute(profile.uuid, ((uuid, profile1) -> profile1 = profile));
     }
 
     /**
