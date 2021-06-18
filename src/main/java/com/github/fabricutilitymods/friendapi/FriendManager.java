@@ -2,29 +2,26 @@ package com.github.fabricutilitymods.friendapi;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.event.ActionListener;
 import java.lang.reflect.Type;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Main class and manager of the Friend API.
  */
 public final class FriendManager {
-
-    /**
-     * The constant INSTANCE of the friend manager.
-     */
-    public static final FriendManager INSTANCE = new FriendManager();
 
     /**
      * Mod Version
@@ -37,40 +34,45 @@ public final class FriendManager {
     private static final Logger LOGGER = LogManager.getLogger("FriendAPI");
 
     /**
+     * The constant INSTANCE of the friend manager.
+     */
+    public static final FriendManager INSTANCE = new FriendManager();
+
+    /**
      * A map of players' UUIDS to their friend class.
      */
-    private final ConcurrentHashMap<UUID, Profile> FRIENDS = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<UUID, Profile> FRIENDS = new ConcurrentHashMap<>();
 
     /**
      * Gson Instance
      */
-    private final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
+    public final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
+
+    /**
+     * TypeToken
+     */
+    private final Type type = new TypeToken<ConcurrentHashMap<String, Profile>>(){}.getType();
+
+    /**
+     * Path to folder
+     */
+    private final Path FOLDER = FabricLoader.getInstance().getGameDir().resolve("friendapi");
 
     /**
      * Path to Json file
      */
-    private final File FOLDER = new File(FabricLoader.getInstance().getGameDir().toString().replaceAll("\\.", "") + "friendapi/");
-    private final File FILE = new File(FOLDER, "friends.json");
-
-    /**
-     * Weather FriendAPI has been loaded or not
-     */
-    private boolean hasLoaded = false;
-
+    private final File FILE = new File(FOLDER.toFile(), "friends.json");
 
     /**
      * Initializes the friend manager.
      */
-    public void init() {
-        if (hasLoaded) return;
+    public FriendManager() {
 
         long start = System.currentTimeMillis();
-
         LOGGER.info("Using FriendAPI " + VERSION);
 
         load();
         Runtime.getRuntime().addShutdownHook(new Thread(this::save));
-        hasLoaded = true;
 
         LOGGER.info("FriendAPI started in " + (System.currentTimeMillis() - start) + "ms");
 
@@ -80,23 +82,13 @@ public final class FriendManager {
      * Loads friends.json into FRIENDS hashmap.
      */
     public void load() {
-        if (!FOLDER.exists()) {
-            FOLDER.mkdirs();
-        }
         try {
+            if (!FILE.exists()) {
+                save();
+            }
             if (FILE.exists()) {
                 Reader reader = Files.newBufferedReader(FILE.toPath());
-                JsonArray jsonArray = new JsonParser().parse(reader).getAsJsonArray();
-                for (JsonElement jsonElement : jsonArray) {
-                    JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-                    for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
-                        JsonObject bluh = jsonObject.get(entry.getKey()).getAsJsonObject();
-                        String name = bluh.get("Name").getAsString();
-                        Affinity affinity = Affinity.valueOf(bluh.get("Affinity").getAsString());
-                        addFriend(new Profile(name, UUID.fromString(entry.getKey()), affinity));
-                    }
-                }
+                FRIENDS = GSON.fromJson(reader, type);
                 reader.close();
             }
         } catch (Exception e) {
@@ -108,21 +100,17 @@ public final class FriendManager {
      * Saves the FRIENDS hashmap into friends.json.
      */
     public void save() {
-        try {
-        OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(FILE), StandardCharsets.UTF_8);
-        JsonArray jsonElement = new JsonArray();
-
-        for (Map.Entry<UUID, Profile> u : FRIENDS.entrySet()) {
-            JsonObject mainObject = new JsonObject();
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.add("Name", new JsonPrimitive(u.getValue().name));
-            jsonObject.add("Uuid", new JsonPrimitive(u.getValue().uuid.toString()));
-            jsonObject.add("Affinity", new JsonPrimitive(u.getValue().affinity.name()));
-            mainObject.add(String.valueOf(u.getKey()), jsonObject);
-            jsonElement.add(mainObject);
+        if (!FOLDER.toFile().exists()) {
+            try {
+                Files.createDirectories(FOLDER);
+            } catch (IOException e) {
+                LOGGER.fatal("Failed to make \"" + FOLDER + "\"!");
+            }
         }
-        output.write(GSON.toJson(jsonElement));
-        output.close();
+        try {
+            OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(FILE), StandardCharsets.UTF_8);
+            output.write(GSON.toJson(FRIENDS));
+            output.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

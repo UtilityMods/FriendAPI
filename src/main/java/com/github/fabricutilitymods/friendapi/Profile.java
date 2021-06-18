@@ -12,10 +12,19 @@ import java.util.UUID;
  */
 public final class Profile {
 
+    /**
+     * The name of the Player
+     */
     public String name;
 
+    /**
+     * The uuid of the Player
+     */
     public UUID uuid;
 
+    /**
+     * Your affinity to the Player
+     */
     public Affinity affinity;
 
     /**
