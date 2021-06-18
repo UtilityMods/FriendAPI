@@ -3,13 +3,13 @@ plugins {
     id 'maven-publish'
 }
 
-version = project.api_version
-group = project.maven_group
-
 
 allprojects {
     apply plugin: "java-library"
     apply plugin: "maven-publish"
+
+    version = project.api_version
+    group = project.maven_group
 
     targetCompatibility = JavaVersion.VERSION_1_8
     sourceCompatibility = JavaVersion.VERSION_1_8

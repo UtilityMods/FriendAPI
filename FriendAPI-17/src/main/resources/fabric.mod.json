@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "friendapi",
+  "version": "${version}",
+  "name": "FriendAPI",
+  "description": "",
+  "authors": ["Fabric Utility Mods"],
+  "contact": {
+    "sources": "https://github.com/UtilityMods/FriendsAPI"
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/friendapi/icon.png",
+  "environment": "client",
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "minecraft": "1.17"
+  }
+}

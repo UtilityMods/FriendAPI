@@ -43,4 +43,5 @@ public class Profile extends BaseProfile {
     public Profile(@NotNull GameProfile gameProfile, @NotNull Affinity affinity) {
         super(gameProfile.getName(), gameProfile.getId(), affinity);
     }
+
 }
