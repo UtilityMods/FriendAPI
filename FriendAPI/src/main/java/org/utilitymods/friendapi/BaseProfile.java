@@ -1,8 +1,11 @@
 package org.utilitymods.friendapi;
 
+import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Profile class to store attributes of a friend.
@@ -23,6 +26,12 @@ public class BaseProfile {
      * Your affinity to the Player
      */
     public Affinity affinity;
+
+    /**
+     * Custom data for the Profile
+     */
+    @SerializedName("data")
+    protected Map<String, Object> dataMap;
 
     /**
      * Instantiates a new Profile provided name and uuid of friend.
@@ -47,6 +56,24 @@ public class BaseProfile {
         this.name = name;
         this.uuid = uuid;
         this.affinity = Affinity.FRIEND;
+    }
+
+    public boolean addData(String key, Object data) {
+        if (dataMap == null) {
+            dataMap = new ConcurrentHashMap<>();
+        }
+        if (dataMap.containsKey(key)) {
+            return false;
+        }
+        dataMap.compute(key, ((key1, data1) -> data1 = data));
+        return true;
+    }
+
+    public Object getData(String key) {
+        if (dataMap == null) {
+            return null;
+        }
+        return dataMap.get(key);
     }
 
     @Override
