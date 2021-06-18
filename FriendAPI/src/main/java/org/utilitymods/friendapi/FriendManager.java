@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 /**
  * Main class and manager of the Friend API.
@@ -50,7 +49,7 @@ public final class FriendManager {
     /**
      * TypeToken
      */
-    private final Type type = new TypeToken<ConcurrentHashMap<String, BaseProfile>>(){}.getType();
+    private final Type type = new TypeToken<ConcurrentHashMap<UUID, BaseProfile>>(){}.getType();
 
     /**
      * Path to Json file
