@@ -28,4 +28,3 @@ tasks.withType(JavaCompile) {
 java {
     withSourcesJar()
 }
-
