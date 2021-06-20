@@ -16,6 +16,10 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            name "Quantum"
+            url "https://maven.quantumclient.org/snapshots"
+        }
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
@@ -23,5 +27,30 @@ allprojects {
         from sourceSets.main.allSource
     }
 
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.java
+            }
+        }
+
+        repositories {
+            maven {
+                url "https://maven.quantumclient.org/snapshots"
+                credentials {
+                    username = System.getenv("MAVEN_USERNAME")
+                    password = System.getenv("MAVEN_PASSWORD")
+                }
+                authentication {
+                    basic(BasicAuthentication)
+                }
+            }
+        }
+    }
 
 }

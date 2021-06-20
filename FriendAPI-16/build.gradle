@@ -18,13 +18,4 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
-
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-}
-
-java {
-    withSourcesJar()
 }
