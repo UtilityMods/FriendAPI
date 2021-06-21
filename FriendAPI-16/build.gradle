@@ -9,7 +9,7 @@ dependencies {
 
     minecraft "com.mojang:minecraft:${project.minecraft_version_16}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings_16}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version_16}"
+    modApi "net.fabricmc:fabric-loader:${project.loader_version_16}"
 }
 
 processResources {
@@ -17,5 +17,15 @@ processResources {
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+        }
     }
 }

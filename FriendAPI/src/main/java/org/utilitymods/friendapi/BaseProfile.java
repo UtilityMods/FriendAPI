@@ -81,4 +81,45 @@ public class BaseProfile {
        return "Name: " + name + "\n" + "Uuid: " + uuid+ "\n"  + "Affinity: " + affinity + "\n";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        BaseProfile baseProfile = (BaseProfile) obj;
+
+        if (name == null) {
+            if (baseProfile.name != null) {
+                return false;
+            }
+        } else if (!name.equals(baseProfile.name)) {
+            return false;
+        }
+
+        if (uuid == null) {
+            if (baseProfile.uuid != null) {
+                return false;
+            }
+        } else if (!uuid.equals(baseProfile.uuid)) {
+            return false;
+        }
+
+        if (affinity == null) {
+            if (baseProfile.affinity != null) {
+                return false;
+            }
+        } else if (!affinity.equals(baseProfile.affinity)) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

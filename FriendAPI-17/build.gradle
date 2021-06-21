@@ -12,7 +12,7 @@ dependencies {
 
     minecraft "com.mojang:minecraft:${project.minecraft_version_17}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings_17}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version_17}"
+    modApi "net.fabricmc:fabric-loader:${project.loader_version_17}"
 }
 
 processResources {
@@ -27,4 +27,14 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 16
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+        }
+    }
 }

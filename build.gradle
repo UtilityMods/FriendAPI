@@ -34,8 +34,10 @@ allprojects {
 
     publishing {
         publications {
-            maven(MavenPublication) {
-                from components.java
+            mavenJava(MavenPublication) {
+                artifact jar
+                artifact sourcesJar
+
             }
         }
 
@@ -43,8 +45,8 @@ allprojects {
             maven {
                 url "https://maven.quantumclient.org/snapshots"
                 credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
+                    username = System.getProperty('MAVEN_USERNAME')
+                    password = System.getProperty('MAVEN_PASSWORD')
                 }
                 authentication {
                     basic(BasicAuthentication)
