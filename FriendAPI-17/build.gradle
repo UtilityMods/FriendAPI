@@ -8,7 +8,7 @@ sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
 
 dependencies {
-    api project(':FriendAPI')
+    modApi project(':FriendAPI')
 
     minecraft "com.mojang:minecraft:${project.minecraft_version_17}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings_17}:v2"
@@ -34,6 +34,7 @@ publishing {
         mavenJava(MavenPublication) {
             artifact(remapJar) {
                 builtBy remapJar
+
             }
         }
     }
