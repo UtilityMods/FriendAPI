@@ -1,6 +1,8 @@
 package org.utilitymods.friendapi;
 
 
+import org.jetbrains.annotations.TestOnly;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -11,16 +13,21 @@ public class Main {
     public static void main(String[] args) {
         FriendManager friendManager = FriendManager.INSTANCE;
         System.out.println(friendManager.getFriendMapCopy());
-        /**
         System.out.println("Size: " +  friendManager.getFriendMapCopy().size());
         addFriend(friendManager);
         addFriendWithData(friendManager);
         BaseProfile isk = addEnemyWithMultiData(friendManager);
 
         System.out.println(friendManager.getFriend(isk.uuid).getData("info"));
-         */
+
         List<String> friendslist = friendManager.getOnlyFriendsProifles().stream().map(baseProfile -> baseProfile.name).collect(Collectors.toList());
         System.out.println(friendslist);
+        try {
+            System.out.println(BaseProfile.fromUsername("Ethius", Affinity.FRIEND));
+            System.out.println(BaseProfile.fromUuid(UUID.fromString("fb482eb2-9751-4479-b07c-df994cffef20"), Affinity.FRIEND));
+        } catch (ApiFailedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static BaseProfile addFriend(FriendManager friendManager) {

@@ -1,8 +1,15 @@
 package org.utilitymods.friendapi;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -74,6 +81,45 @@ public class BaseProfile {
             return null;
         }
         return dataMap.get(key);
+    }
+
+    /**
+     * Attempts to make a new base profile though getting the uuid from the mojang api
+     * @param username Username of the player you want a profile of
+     * @param affinity the affinity with the profile
+     * @return new BaseProfile based on the data from the api
+     * @throws ApiFailedException if some part of the process fails throw an error
+     */
+    public static BaseProfile fromUsername(String username, Affinity affinity) throws ApiFailedException {
+        try {
+            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + username);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            JsonObject jsonObject = new JsonParser().parse(new InputStreamReader(conn.getInputStream())).getAsJsonObject();
+            UUID uuid = UUID.fromString(jsonObject.get("id").getAsString().replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"));
+            String name = jsonObject.get("name").getAsString();
+            return new BaseProfile(name, uuid, affinity);
+        } catch (Exception e) {
+            throw new ApiFailedException("no uuid associated with " + username);
+        }
+    }
+
+    /**
+     * Attempts to make a new base profile though getting the name from the mojang api
+     * @param uuid Uuid of the player you want a profile of
+     * @param affinity the affinity with the profile
+     * @return new BaseProfile based on the data from the api
+     * @throws ApiFailedException if some part of the process fails throw an error
+     */
+    public static BaseProfile fromUuid(UUID uuid, Affinity affinity) throws ApiFailedException {
+        try {
+            URL url = new URL("https://api.mojang.com/user/profiles/" + uuid.toString() + "/names");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            JsonArray jsonArray = new JsonParser().parse(new InputStreamReader(conn.getInputStream())).getAsJsonArray();
+            String name = jsonArray.get(jsonArray.size() - 1).getAsJsonObject().get("name").getAsString();
+            return new BaseProfile(name, uuid, affinity);
+        } catch (Exception e) {
+            throw new ApiFailedException("no username associated with uuid:" + uuid);
+        }
     }
 
     @Override

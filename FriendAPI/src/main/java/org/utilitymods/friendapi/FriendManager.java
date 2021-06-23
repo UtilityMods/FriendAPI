@@ -169,7 +169,6 @@ public final class FriendManager {
      * @return whether the player queried is a registered friend
      */
     public boolean isFriend(@NotNull UUID uuid) {
-        System.out.println(getAffinity(uuid));
         return getAffinity(uuid).type == Affinity.FRIEND.type;
     }
 
@@ -191,6 +190,34 @@ public final class FriendManager {
      */
     public boolean isNeutral(@NotNull UUID uuid) {
         return getAffinity(uuid).type < 2;
+    }
+
+    /**
+     * Attempts to add all friends from a name based friend list
+     * @param nameList List of the usernames you want to add to the friend list
+     */
+    public void migrateFromNameList(List<String> nameList) {
+        nameList.forEach(name -> {
+            try {
+                addFriend(BaseProfile.fromUsername(name, Affinity.FRIEND));
+            } catch (ApiFailedException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Attempts to add all friends from a uuid based friend list
+     * @param nameList List of player uuids you want to add to the friend list
+     */
+    public void migrateFromUuidList(List<UUID> nameList) {
+        nameList.forEach(uuid -> {
+            try {
+                addFriend(BaseProfile.fromUuid(uuid, Affinity.FRIEND));
+            } catch (ApiFailedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }
