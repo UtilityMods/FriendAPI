@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        maven {
+            name = 'forge'
+            url = 'https://files.minecraftforge.net/maven'
+        }
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+
+archivesBaseName = "FriendAPI-12"
+
+
+minecraft {
+    mappings channel: 'stable', version: '39-1.12'
+}
+
+dependencies {
+
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
+    api project(':FriendAPI')
+    library (project(':FriendAPI')) {
+        exclude group: 'org.jetbrains', module: ''
+        exclude group: 'com.google.code.gson', module: ''
+        exclude group: 'org.apache.logging.log4j', module: ''
+    }
+
+
+
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+jar.finalizedBy('reobfJar')

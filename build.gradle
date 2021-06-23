@@ -3,7 +3,6 @@ plugins {
     id 'maven-publish'
 }
 
-
 allprojects {
     apply plugin: "java-library"
     apply plugin: "maven-publish"
@@ -11,8 +10,9 @@ allprojects {
     version = project.api_version
     group = project.maven_group
 
-    targetCompatibility = JavaVersion.VERSION_1_8
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    configurations {
+        library
+    }
 
     repositories {
         mavenCentral()
@@ -55,4 +55,20 @@ allprojects {
         }
     }
 
+    jar {
+        from {
+            configurations.library.collect {
+                it.isDirectory() ? it :  zipTree(it)
+            }
+        }
+    }
+
+}
+
+task buildAll(group: 'build') {
+    subprojects.forEach(p -> buildAll.dependsOn(p.tasks.build))
+}
+
+task publishAll(group: 'publishing') {
+    subprojects.forEach(p -> publishAll.dependsOn(p.tasks.publish))
 }

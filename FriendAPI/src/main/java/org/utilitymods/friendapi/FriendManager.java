@@ -11,10 +11,9 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Main class and manager of the Friend API.
@@ -111,6 +110,15 @@ public final class FriendManager {
     @NotNull
     public Map<UUID, BaseProfile> getFriendMapCopy() {
         return Collections.unmodifiableMap(FRIENDS) ;
+    }
+
+    /**
+     * Gets a only your friend's profiles
+     * @return list with only friend's profiles
+     */
+    @NotNull
+    public List<BaseProfile> getOnlyFriendsProifles() {
+        return getFriendMapCopy().values().stream().filter(profile -> profile.affinity == Affinity.FRIEND).collect(Collectors.toList());
     }
 
     /**

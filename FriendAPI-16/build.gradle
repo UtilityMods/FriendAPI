@@ -1,11 +1,18 @@
 plugins {
-    id 'fabric-loom' version '0.6-SNAPSHOT'
+    id 'fabric-loom' version '0.8-SNAPSHOT'
 }
 
 archivesBaseName = "FriendAPI-16"
 
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 dependencies {
-    api project(':FriendAPI')
+    modApi (project(':FriendAPI')) {
+        exclude group: 'org.apache.logging.log4j', module: ''
+    }
+    include project(':FriendAPI')
 
     minecraft "com.mojang:minecraft:${project.minecraft_version_16}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings_16}:v2"

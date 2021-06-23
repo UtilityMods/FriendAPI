@@ -1,19 +1,26 @@
 package org.utilitymods.friendapi;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Main {
 
     public static void main(String[] args) {
         FriendManager friendManager = FriendManager.INSTANCE;
+        System.out.println(friendManager.getFriendMapCopy());
+        /**
         System.out.println("Size: " +  friendManager.getFriendMapCopy().size());
         addFriend(friendManager);
         addFriendWithData(friendManager);
         BaseProfile isk = addEnemyWithMultiData(friendManager);
 
         System.out.println(friendManager.getFriend(isk.uuid).getData("info"));
-
+         */
+        List<String> friendslist = friendManager.getOnlyFriendsProifles().stream().map(baseProfile -> baseProfile.name).collect(Collectors.toList());
+        System.out.println(friendslist);
     }
 
     private static BaseProfile addFriend(FriendManager friendManager) {

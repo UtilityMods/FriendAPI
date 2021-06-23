@@ -13,3 +13,5 @@ include 'FriendAPI'
 
 include 'FriendAPI-16'
 include 'FriendAPI-17'
+include 'FriendAPI-12'
+
