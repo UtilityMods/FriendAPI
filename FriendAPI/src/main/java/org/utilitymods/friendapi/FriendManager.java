@@ -131,7 +131,14 @@ public final class FriendManager {
      */
     @NotNull
     public BaseProfile getFriend(@NotNull UUID uuid) {
-        return FRIENDS.computeIfAbsent(uuid, k -> new BaseProfile("empty", uuid, Affinity.NEUTRAL));
+        return FRIENDS.computeIfAbsent(uuid, k -> {
+            try {
+                return BaseProfile.fromUuid(uuid, Affinity.NEUTRAL);
+            } catch (ApiFailedException e) {
+                e.printStackTrace();
+                return new BaseProfile("empty", uuid, Affinity.NEUTRAL);
+            }
+        });
     }
 
     /**
@@ -150,7 +157,7 @@ public final class FriendManager {
      * @param uuid the uuid of the friend to remove
      */
     public void removeFriend(@NotNull UUID uuid) {
-        FRIENDS.remove(uuid);
+        FRIENDS.get(uuid).affinity = Affinity.NEUTRAL;
     }
 
     /**
