@@ -38,7 +38,7 @@ public class BaseProfile {
      * Custom data for the Profile
      */
     @SerializedName("data")
-    protected Map<String, Object> dataMap;
+    protected Map<String, Object> dataMap = new ConcurrentHashMap<>();
 
     /**
      * Instantiates a new Profile provided name and uuid of friend.
@@ -65,10 +65,15 @@ public class BaseProfile {
         this.affinity = Affinity.FRIEND;
     }
 
+    /**
+     * Add custom data to the profile
+     * @param key The key it's place in the map with.
+     *            Should follow a naming scheme of the client's name an underscore and the object's name.
+     *            Ex: WURST_ALIAS
+     * @param data the dataObject you want to save
+     * @return Whether adding the data was successful
+     */
     public boolean addData(String key, Object data) {
-        if (dataMap == null) {
-            dataMap = new ConcurrentHashMap<>();
-        }
         if (dataMap.containsKey(key)) {
             return false;
         }
@@ -76,10 +81,12 @@ public class BaseProfile {
         return true;
     }
 
+    /**
+     * Get's data already in the list
+     * @param key The key the data is under
+     * @return The object associated with the key
+     */
     public Object getData(String key) {
-        if (dataMap == null) {
-            return null;
-        }
         return dataMap.get(key);
     }
 

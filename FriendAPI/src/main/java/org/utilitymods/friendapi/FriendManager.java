@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.NotNull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.utilitymods.friendapi.serialization.MapAdapter;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -43,7 +44,7 @@ public final class FriendManager {
     /**
      * Gson Instance
      */
-    public final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
+    public final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().registerTypeHierarchyAdapter(Map.class, new MapAdapter()).setPrettyPrinting().create();
 
     /**
      * TypeToken
@@ -80,7 +81,8 @@ public final class FriendManager {
             }
             if (FILE.exists()) {
                 Reader reader = Files.newBufferedReader(FILE.toPath());
-                FRIENDS = GSON.fromJson(reader, type);
+                ConcurrentHashMap<UUID, BaseProfile> tempList = GSON.fromJson(reader, type);
+                if (tempList != null) FRIENDS.putAll(tempList);
                 reader.close();
             }
         } catch (Exception e) {

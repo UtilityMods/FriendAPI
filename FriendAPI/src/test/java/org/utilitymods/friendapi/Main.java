@@ -1,9 +1,5 @@
 package org.utilitymods.friendapi;
 
-
-import org.jetbrains.annotations.TestOnly;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -19,7 +15,6 @@ public class Main {
         BaseProfile isk = addEnemyWithMultiData(friendManager);
 
         System.out.println(friendManager.getFriend(isk.uuid).getData("info"));
-
         List<String> friendslist = friendManager.getOnlyFriendsProifles().stream().map(baseProfile -> baseProfile.name).collect(Collectors.toList());
         System.out.println(friendslist);
         try {

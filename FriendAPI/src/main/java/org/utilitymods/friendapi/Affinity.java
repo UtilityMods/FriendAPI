@@ -1,5 +1,8 @@
 package org.utilitymods.friendapi;
 
+/**
+ * Enum used to define affiliation with the friend
+ */
 public enum Affinity {
 
     FRIEND(0),

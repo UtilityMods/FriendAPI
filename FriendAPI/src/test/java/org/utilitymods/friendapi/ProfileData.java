@@ -11,4 +11,9 @@ public class ProfileData {
         this.kills = kills;
     }
 
+    @Override
+    public String toString() {
+        return "Alias: " + alias + "\n" + "Kills: " + kills + "\n";
+    }
+
 }
