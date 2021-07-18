@@ -17,8 +17,12 @@ allprojects {
     repositories {
         mavenCentral()
         maven {
-            name "Quantum"
-            url "https://maven.quantumclient.org/snapshots"
+            name = 'Quantum'
+            url = 'https://maven.quantumclient.org/snapshots'
+        }
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
         }
     }
 

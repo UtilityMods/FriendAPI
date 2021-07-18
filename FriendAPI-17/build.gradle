@@ -14,6 +14,9 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version_17}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings_17}:v2"
     modApi "net.fabricmc:fabric-loader:${project.loader_version_17}"
+
+    modImplementation(include("net.fabricmc.fabric-api:fabric-api-base:0.3.0+c88702897d"))
+    modImplementation(include("net.fabricmc.fabric-api:fabric-command-api-v1:1.1.2+6cefd57713"))
 }
 
 processResources {

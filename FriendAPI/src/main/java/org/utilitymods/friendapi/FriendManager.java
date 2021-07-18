@@ -42,6 +42,11 @@ public final class FriendManager {
     private ConcurrentHashMap<UUID, BaseProfile> FRIENDS = new ConcurrentHashMap<>();
 
     /**
+     * A map of players' UUIDS to the players they are neutral to, this is not saved and works as a cache;
+     */
+    private ConcurrentHashMap<UUID, BaseProfile> NEUTRALCACHE = new ConcurrentHashMap<>();
+
+    /**
      * Gson Instance
      */
     public final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().registerTypeHierarchyAdapter(Map.class, new MapAdapter()).setPrettyPrinting().create();
@@ -131,14 +136,18 @@ public final class FriendManager {
      */
     @NotNull
     public BaseProfile getFriend(@NotNull UUID uuid) {
-        return FRIENDS.computeIfAbsent(uuid, k -> {
-            try {
-                return BaseProfile.fromUuid(uuid, Affinity.NEUTRAL);
-            } catch (ApiFailedException e) {
-                e.printStackTrace();
-                return new BaseProfile("empty", uuid, Affinity.NEUTRAL);
-            }
-        });
+        if (FRIENDS.containsKey(uuid)) {
+            return FRIENDS.get(uuid);
+        } else {
+            return NEUTRALCACHE.computeIfAbsent(uuid, k -> {
+                try {
+                    return BaseProfile.fromUuid(uuid, Affinity.NEUTRAL);
+                } catch (ApiFailedException e) {
+                    e.printStackTrace();
+                    return new BaseProfile("empty", uuid, Affinity.NEUTRAL);
+                }
+            });
+        }
     }
 
     /**
@@ -157,7 +166,12 @@ public final class FriendManager {
      * @param uuid the uuid of the friend to remove
      */
     public void removeFriend(@NotNull UUID uuid) {
-        FRIENDS.get(uuid).affinity = Affinity.NEUTRAL;
+        BaseProfile profile = FRIENDS.get(uuid);
+        if (profile != null) {
+            FRIENDS.remove(uuid);
+            profile.affinity = Affinity.NEUTRAL;
+            NEUTRALCACHE.compute(uuid, ((uuid1, baseProfile) -> baseProfile = profile));
+        }
     }
 
     /**
