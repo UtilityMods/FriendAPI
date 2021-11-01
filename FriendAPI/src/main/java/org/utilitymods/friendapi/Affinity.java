@@ -1,5 +1,9 @@
 package org.utilitymods.friendapi;
 
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Locale;
+
 /**
  * Enum used to define affiliation with the friend
  */
@@ -15,6 +19,11 @@ public enum Affinity {
 
     Affinity(int type) {
         this.type = type;
+    }
+
+    @Nullable
+    public static Affinity byName(@Nullable String name) {
+        return name == null ? null : Affinity.valueOf(name.toUpperCase(Locale.ROOT));
     }
 
 }

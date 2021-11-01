@@ -9,14 +9,19 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    modApi (project(':FriendAPI')) {
+    api project(':FriendAPI')
+    library (project(':FriendAPI')) {
+        exclude group: 'org.jetbrains', module: ''
+        exclude group: 'com.google.code.gson', module: ''
         exclude group: 'org.apache.logging.log4j', module: ''
     }
-    include project(':FriendAPI')
 
     minecraft "com.mojang:minecraft:${project.minecraft_version_16}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings_16}:v2"
     modApi "net.fabricmc:fabric-loader:${project.loader_version_16}"
+
+    modImplementation(include("net.fabricmc.fabric-api:fabric-api-base:0.3.0+f74f7c7d7d"))
+    modImplementation(include("net.fabricmc.fabric-api:fabric-command-api-v1:1.1.2+f74f7c7d7d"))
 }
 
 processResources {

@@ -7,7 +7,7 @@ import java.util.UUID;
 public class MigrationTest {
 
     public static void main(String[] args) {
-        FriendManager friendManager = FriendManager.INSTANCE;
+        FriendManager friendManager = FriendManager.getInstance();
         MigrationTest migrationTest = new MigrationTest();
 
         migrationTest.migrateUsernameList(friendManager);

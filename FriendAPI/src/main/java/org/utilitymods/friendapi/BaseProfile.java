@@ -21,6 +21,7 @@ public class BaseProfile {
     /**
      * The name of the Player
      */
+    @SerializedName("name")
     public String name;
 
     /**

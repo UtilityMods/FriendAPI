@@ -33,23 +33,25 @@ public final class FriendManager {
 
     /**
      * The constant INSTANCE of the friend manager.
+     * @deprecated Please use {@link FriendManager#getInstance()}
      */
+    @Deprecated
     public static final FriendManager INSTANCE = new FriendManager();
 
     /**
      * A map of players' UUIDS to their friend class.
      */
-    private ConcurrentHashMap<UUID, BaseProfile> FRIENDS = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, BaseProfile> friends = new ConcurrentHashMap<>();
 
     /**
      * A map of players' UUIDS to the players they are neutral to, this is not saved and works as a cache;
      */
-    private ConcurrentHashMap<UUID, BaseProfile> NEUTRALCACHE = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, BaseProfile> neutralCache = new ConcurrentHashMap<>();
 
     /**
      * Gson Instance
      */
-    public final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().registerTypeHierarchyAdapter(Map.class, new MapAdapter()).setPrettyPrinting().create();
+    private final Gson gson = new GsonBuilder().enableComplexMapKeySerialization().registerTypeHierarchyAdapter(Map.class, new MapAdapter()).setPrettyPrinting().create();
 
     /**
      * TypeToken
@@ -59,13 +61,12 @@ public final class FriendManager {
     /**
      * Path to Json file
      */
-    private final File FILE = new File(System.getProperty("user.home"), ".friends.json");
+    private final File file = new File(System.getProperty("user.home"), ".friends.json");
 
     /**
      * Initializes the friend manager.
      */
-    public FriendManager() {
-
+    private FriendManager() {
         long start = System.currentTimeMillis();
         LOGGER.info("Using FriendAPI " + VERSION);
 
@@ -77,22 +78,32 @@ public final class FriendManager {
     }
 
     /**
+     * Get the FriendManager Instance
+     */
+    @SuppressWarnings("deprecation")
+    public static FriendManager getInstance() {
+        if (INSTANCE == null)
+            throw new RuntimeException("FriendAPI accessed to early");
+        return INSTANCE;
+    }
+
+    /**
      * Loads friends.json into FRIENDS hashmap.
      */
     public void load() {
         try {
-            if (!FILE.exists()) {
+            if (!file.exists()) {
                 save();
             }
-            if (FILE.exists()) {
-                Reader reader = Files.newBufferedReader(FILE.toPath());
-                ConcurrentHashMap<UUID, BaseProfile> tempList = GSON.fromJson(reader, type);
-                if (tempList != null) FRIENDS.putAll(tempList);
+            if (file.exists()) {
+                Reader reader = Files.newBufferedReader(file.toPath());
+                ConcurrentHashMap<UUID, BaseProfile> tempList = gson.fromJson(reader, type);
+                if (tempList != null) friends.putAll(tempList);
                 reader.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.fatal("Failed to load \"" + FILE.getAbsolutePath() + "\"!");
+            LOGGER.fatal("Failed to load " + file.getAbsolutePath() + "!");
         }
     }
 
@@ -101,11 +112,12 @@ public final class FriendManager {
      */
     public void save() {
         try {
-            OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(FILE), StandardCharsets.UTF_8);
-            output.write(GSON.toJson(FRIENDS));
+            OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+            output.write(gson.toJson(friends));
             output.close();
         } catch (IOException e) {
             e.printStackTrace();
+            LOGGER.fatal("Failed to save \"" + file.getAbsolutePath() + "\"!");
         }
     }
 
@@ -116,16 +128,25 @@ public final class FriendManager {
      */
     @NotNull
     public Map<UUID, BaseProfile> getFriendMapCopy() {
-        return Collections.unmodifiableMap(FRIENDS) ;
+        return Collections.unmodifiableMap(friends) ;
     }
 
     /**
-     * Gets a only your friend's profiles
-     * @return list with only friend's profiles
+     * Gets a list with only your friends profiles
+     * @return list with only friends profiles
      */
     @NotNull
-    public List<BaseProfile> getOnlyFriendsProifles() {
+    public List<BaseProfile> getOnlyFriendsProfiles() {
         return getFriendMapCopy().values().stream().filter(profile -> profile.affinity == Affinity.FRIEND).collect(Collectors.toList());
+    }
+
+    /**
+     * Gets a only your friends and enemies profiles
+     * @return list with only friends and enemies profiles
+     */
+    @NotNull
+    public List<BaseProfile> getOnlyAllProfiles() {
+        return getFriendMapCopy().values().stream().filter(profile -> profile.affinity != Affinity.NEUTRAL).collect(Collectors.toList());
     }
 
     /**
@@ -136,10 +157,10 @@ public final class FriendManager {
      */
     @NotNull
     public BaseProfile getFriend(@NotNull UUID uuid) {
-        if (FRIENDS.containsKey(uuid)) {
-            return FRIENDS.get(uuid);
+        if (friends.containsKey(uuid)) {
+            return friends.get(uuid);
         } else {
-            return NEUTRALCACHE.computeIfAbsent(uuid, k -> {
+            return neutralCache.computeIfAbsent(uuid, k -> {
                 try {
                     return BaseProfile.fromUuid(uuid, Affinity.NEUTRAL);
                 } catch (ApiFailedException e) {
@@ -157,7 +178,7 @@ public final class FriendManager {
      * @return the newly created friend
      */
     public BaseProfile addFriend(BaseProfile profile) {
-        return FRIENDS.compute(profile.uuid, ((uuid, profile1) -> profile1 = profile));
+        return friends.compute(profile.uuid, ((uuid, profile1) -> profile1 = profile));
     }
 
     /**
@@ -166,11 +187,11 @@ public final class FriendManager {
      * @param uuid the uuid of the friend to remove
      */
     public void removeFriend(@NotNull UUID uuid) {
-        BaseProfile profile = FRIENDS.get(uuid);
+        BaseProfile profile = friends.get(uuid);
         if (profile != null) {
-            FRIENDS.remove(uuid);
+            friends.remove(uuid);
             profile.affinity = Affinity.NEUTRAL;
-            NEUTRALCACHE.compute(uuid, ((uuid1, baseProfile) -> baseProfile = profile));
+            neutralCache.compute(uuid, ((uuid1, baseProfile) -> baseProfile = profile));
         }
     }
 

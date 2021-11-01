@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args) {
-        FriendManager friendManager = FriendManager.INSTANCE;
+        FriendManager friendManager = FriendManager.getInstance();
         System.out.println(friendManager.getFriendMapCopy());
         System.out.println("Size: " +  friendManager.getFriendMapCopy().size());
         addFriend(friendManager);
@@ -15,7 +15,7 @@ public class Main {
         BaseProfile isk = addEnemyWithMultiData(friendManager);
 
         System.out.println(friendManager.getFriend(isk.uuid).getData("info"));
-        List<String> friendslist = friendManager.getOnlyFriendsProifles().stream().map(baseProfile -> baseProfile.name).collect(Collectors.toList());
+        List<String> friendslist = friendManager.getOnlyFriendsProfiles().stream().map(baseProfile -> baseProfile.name).collect(Collectors.toList());
         System.out.println(friendslist);
         try {
             System.out.println(BaseProfile.fromUsername("Ethius", Affinity.FRIEND));

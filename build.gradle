@@ -49,7 +49,7 @@ allprojects {
             maven {
                 url "https://maven.quantumclient.org/snapshots"
                 credentials {
-                    username = System.getProperty('MAVEN_USERNAME')
+                    username =  System.getProperty('MAVEN_USERNAME')
                     password = System.getProperty('MAVEN_PASSWORD')
                 }
                 authentication {
