@@ -58,8 +58,8 @@ public class BaseProfile {
     /**
      * Instantiates a new Profile provided name and uuid of friend.
      *
-     * @param name     the name of the friend
-     * @param uuid     the uuid of the friend
+     * @param name the name of the friend
+     * @param uuid the uuid of the friend
      */
     public BaseProfile(@NotNull String name, @NotNull UUID uuid) {
         this.name = name;
@@ -69,9 +69,10 @@ public class BaseProfile {
 
     /**
      * Add custom data to the profile
-     * @param key The key it's place in the map with.
-     *            Should follow a naming scheme of the client's name an underscore and the object's name.
-     *            Ex: WURST_ALIAS
+     *
+     * @param key  The key it's place in the map with.
+     *             Should follow a naming scheme of the client's name an underscore and the object's name.
+     *             Ex: WURST_ALIAS
      * @param data the dataObject you want to save
      * @return Whether adding the data was successful
      */
@@ -85,6 +86,7 @@ public class BaseProfile {
 
     /**
      * Get's data already in the list
+     *
      * @param key The key the data is under
      * @return The object associated with the key
      */
@@ -94,6 +96,7 @@ public class BaseProfile {
 
     /**
      * Attempts to make a new base profile though getting the uuid from the mojang api
+     *
      * @param username Username of the player you want a profile of
      * @param affinity the affinity with the profile
      * @return new BaseProfile based on the data from the api
@@ -114,7 +117,8 @@ public class BaseProfile {
 
     /**
      * Attempts to make a new base profile though getting the name from the mojang api
-     * @param uuid Uuid of the player you want a profile of
+     *
+     * @param uuid     Uuid of the player you want a profile of
      * @param affinity the affinity with the profile
      * @return new BaseProfile based on the data from the api
      * @throws ApiFailedException if some part of the process fails throw an error
@@ -133,7 +137,7 @@ public class BaseProfile {
 
     @Override
     public String toString() {
-       return "Name: " + name + "\n" + "Uuid: " + uuid+ "\n"  + "Affinity: " + affinity + "\n";
+        return "Name: " + name + "\n" + "Uuid: " + uuid + "\n" + "Affinity: " + affinity + "\n";
     }
 
     @Override

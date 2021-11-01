@@ -4,7 +4,9 @@
   "version": "${version}",
   "name": "FriendAPI",
   "description": "This library add support for the FriendAPI which allows for the same friends across client, versions, and instances",
-  "authors": ["Utility Mods"],
+  "authors": [
+    "Utility Mods"
+  ],
   "contact": {
     "sources": "https://github.com/UtilityMods/FriendsAPI"
   },
@@ -21,7 +23,9 @@
   },
   "custom": {
     "modmenu": {
-      "badges": [ "library" ],
+      "badges": [
+        "library"
+      ],
       "links": {
         "modmenu.discord": "https://discord.gg/h8EQyuYTK7"
       }

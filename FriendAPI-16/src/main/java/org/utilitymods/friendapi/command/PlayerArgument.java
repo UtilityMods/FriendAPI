@@ -48,7 +48,7 @@ public class PlayerArgument implements ArgumentType<PlayerEntity> {
         if (context.getSource() instanceof CommandSource) {
             StringReader stringReader = new StringReader(builder.getInput());
             stringReader.setCursor(builder.getStart());
-            CommandSource commandSource = (CommandSource)context.getSource();
+            CommandSource commandSource = (CommandSource) context.getSource();
 
             return CommandSource.suggestMatching(commandSource.getPlayerNames(), builder);
         } else {

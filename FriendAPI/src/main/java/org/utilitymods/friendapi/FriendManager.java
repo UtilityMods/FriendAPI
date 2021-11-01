@@ -3,16 +3,19 @@ package org.utilitymods.friendapi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import org.jetbrains.annotations.NotNull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.utilitymods.friendapi.serialization.MapAdapter;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,7 @@ public final class FriendManager {
 
     /**
      * The constant INSTANCE of the friend manager.
+     *
      * @deprecated Please use {@link FriendManager#getInstance()}
      */
     @Deprecated
@@ -56,7 +60,7 @@ public final class FriendManager {
     /**
      * TypeToken
      */
-    private final Type type = new TypeToken<ConcurrentHashMap<UUID, BaseProfile>>(){}.getType();
+    private final Type type = new TypeToken<ConcurrentHashMap<UUID, BaseProfile>>() {}.getType();
 
     /**
      * Path to Json file
@@ -128,11 +132,12 @@ public final class FriendManager {
      */
     @NotNull
     public Map<UUID, BaseProfile> getFriendMapCopy() {
-        return Collections.unmodifiableMap(friends) ;
+        return Collections.unmodifiableMap(friends);
     }
 
     /**
      * Gets a list with only your friends profiles
+     *
      * @return list with only friends profiles
      */
     @NotNull
@@ -142,6 +147,7 @@ public final class FriendManager {
 
     /**
      * Gets a only your friends and enemies profiles
+     *
      * @return list with only friends and enemies profiles
      */
     @NotNull
@@ -238,6 +244,7 @@ public final class FriendManager {
 
     /**
      * Attempts to add all friends from a name based friend list
+     *
      * @param nameList List of the usernames you want to add to the friend list
      */
     public void migrateFromNameList(List<String> nameList) {
@@ -252,6 +259,7 @@ public final class FriendManager {
 
     /**
      * Attempts to add all friends from a uuid based friend list
+     *
      * @param nameList List of player uuids you want to add to the friend list
      */
     public void migrateFromUuidList(List<UUID> nameList) {

@@ -26,17 +26,17 @@ class Commands {
             .then(ClientCommandManager.argument("name", new PlayerArgument(MinecraftClient.getInstance()))
                     .executes(context -> executeAdd(context.getSource(), PlayerArgument.getPlayer(context, "name"), Affinity.FRIEND))
                     .then(ClientCommandManager.argument("affinity", AffinityArgument.affinity())
-                        .executes(context ->executeAdd(context.getSource(), PlayerArgument.getPlayer(context, "name"), AffinityArgument.getAffinity(context, "affinity"))))
+                            .executes(context -> executeAdd(context.getSource(), PlayerArgument.getPlayer(context, "name"), AffinityArgument.getAffinity(context, "affinity"))))
             ).build();
 
     public final LiteralCommandNode<FabricClientCommandSource> remove = ClientCommandManager.literal("remove")
             .then(ClientCommandManager.argument("name", new FriendArgument())
-            .executes(context -> {
-                BaseProfile player = context.getArgument("name", BaseProfile.class);
-                FriendManager.getInstance().removeFriend(player.uuid);
-                context.getSource().sendFeedback(new LiteralText(player.name + " has been removed").styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, COMMAND_BASE + "add " + player.name)).withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new LiteralText("add friend")))));
-            return SINGLE_SUCCESS;
-    })).build();
+                    .executes(context -> {
+                        BaseProfile player = context.getArgument("name", BaseProfile.class);
+                        FriendManager.getInstance().removeFriend(player.uuid);
+                        context.getSource().sendFeedback(new LiteralText(player.name + " has been removed").styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, COMMAND_BASE + "add " + player.name)).withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new LiteralText("add friend")))));
+                        return SINGLE_SUCCESS;
+                    })).build();
 
     public final LiteralCommandNode<FabricClientCommandSource> list = ClientCommandManager.literal("list")
             .then(ClientCommandManager.literal("friends")
@@ -58,7 +58,8 @@ class Commands {
 
     private int executeList(FabricClientCommandSource source, boolean friends, boolean enemies) {
         for (BaseProfile profile : FriendManager.getInstance().getOnlyAllProfiles()) {
-            if (!(profile.affinity.equals(Affinity.FRIEND) && friends) && !(profile.affinity.equals(Affinity.ENEMY) && enemies)) continue;
+            if (!(profile.affinity.equals(Affinity.FRIEND) && friends) && !(profile.affinity.equals(Affinity.ENEMY) && enemies))
+                continue;
             source.sendFeedback(getTextOfProfile(profile));
         }
         return SINGLE_SUCCESS;

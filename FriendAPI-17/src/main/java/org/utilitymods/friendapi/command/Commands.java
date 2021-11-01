@@ -26,7 +26,7 @@ class Commands {
             .then(ClientCommandManager.argument("name", new PlayerArgument(MinecraftClient.getInstance()))
                     .executes(context -> executeAdd(context.getSource(), PlayerArgument.getPlayer(context, "name"), Affinity.FRIEND))
                     .then(ClientCommandManager.argument("affinity", AffinityArgument.affinity())
-                            .executes(context ->executeAdd(context.getSource(), PlayerArgument.getPlayer(context, "name"), AffinityArgument.getAffinity(context, "affinity"))))
+                            .executes(context -> executeAdd(context.getSource(), PlayerArgument.getPlayer(context, "name"), AffinityArgument.getAffinity(context, "affinity"))))
             ).build();
 
     public final LiteralCommandNode<FabricClientCommandSource> remove = ClientCommandManager.literal("remove")
@@ -58,7 +58,8 @@ class Commands {
 
     private int executeList(FabricClientCommandSource source, boolean friends, boolean enemies) {
         for (BaseProfile profile : FriendManager.getInstance().getOnlyAllProfiles()) {
-            if (!(profile.affinity.equals(Affinity.FRIEND) && friends) && !(profile.affinity.equals(Affinity.ENEMY) && enemies)) continue;
+            if (!(profile.affinity.equals(Affinity.FRIEND) && friends) && !(profile.affinity.equals(Affinity.ENEMY) && enemies))
+                continue;
             source.sendFeedback(getTextOfProfile(profile));
         }
         return SINGLE_SUCCESS;
