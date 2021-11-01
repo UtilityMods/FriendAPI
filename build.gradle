@@ -7,7 +7,7 @@ allprojects {
     apply plugin: "java-library"
     apply plugin: "maven-publish"
 
-    version = project.api_version + (System.getenv("CI") ? ("-" + System.getenv("GITHUB_SHA").substring(0, 8)) : "")
+    version = project.api_version + (System.getenv("CI") && !project.hasProperty("isRelase") ? ("-" + System.getenv("GITHUB_SHA").substring(0, 8)) : "")
 
     group = project.maven_group
 
