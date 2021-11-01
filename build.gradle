@@ -7,7 +7,8 @@ allprojects {
     apply plugin: "java-library"
     apply plugin: "maven-publish"
 
-    version = project.api_version
+    version = project.api_version + (System.getenv("CI") ? ("-" + System.getenv("GITHUB_SHA").substring(0, 8)) : "")
+
     group = project.maven_group
 
     configurations {
@@ -47,14 +48,50 @@ allprojects {
 
         repositories {
             maven {
+                name "Quantum-snapshots"
                 url "https://maven.quantumclient.org/snapshots"
                 credentials {
-                    username =  System.getProperty('MAVEN_USERNAME')
-                    password = System.getProperty('MAVEN_PASSWORD')
+                    username = System.getenv('MAVEN_USERNAME')
+                    password = System.getenv('MAVEN_PASSWORD')
                 }
                 authentication {
                     basic(BasicAuthentication)
                 }
+            }
+            maven {
+                name "Quantum-releases"
+                url "https://maven.quantumclient.org/releases"
+                credentials {
+                    username = System.getenv('MAVEN_USERNAME')
+                    password = System.getenv('MAVEN_PASSWORD')
+                }
+                authentication {
+                    basic(BasicAuthentication)
+                }
+                ext.releases = true
+            }
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/UtilityMods/FriendAPI")
+                credentials {
+                    username = System.getenv("GH_USERNAME")
+                    password = System.getenv("GH_TOKEN")
+                }
+                ext.releases = true
+            }
+
+        }
+    }
+
+    afterEvaluate {
+        tasks.withType(PublishToMavenRepository).all { publishTask ->
+            publishTask.onlyIf { task ->
+                if (task.repository.hasProperty('releases') && !project.hasProperty("isRelase")) {
+                    task.enabled = false
+                    task.group = null
+                    return false
+                }
+                return true
             }
         }
     }
