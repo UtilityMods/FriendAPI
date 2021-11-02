@@ -134,7 +134,7 @@ public class BaseProfile {
             throw new ApiFailedException("no username associated with uuid:" + uuid);
         }
     }
-
+    
     @Override
     public String toString() {
         return "Name: " + name + "\n" + "Uuid: " + uuid + "\n" + "Affinity: " + affinity + "\n";

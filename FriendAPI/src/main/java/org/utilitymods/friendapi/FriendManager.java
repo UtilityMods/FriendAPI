@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * Main class and manager of the Friend API.
+ * The FriendManager is the main class of the FriendAPI. It is responsible for managing the friends of a player.
  */
 public final class FriendManager {
 
@@ -68,7 +68,7 @@ public final class FriendManager {
     private final File file = new File(System.getProperty("user.home"), ".friends.json");
 
     /**
-     * Initializes the friend manager.
+     * Instantiates a new Friend manager.
      */
     private FriendManager() {
         long start = System.currentTimeMillis();
@@ -82,7 +82,7 @@ public final class FriendManager {
     }
 
     /**
-     * Get the FriendManager Instance
+     * Gets the instance of the friend manager.
      */
     @SuppressWarnings("deprecation")
     public static FriendManager getInstance() {

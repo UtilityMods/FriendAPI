@@ -21,6 +21,12 @@ public enum Affinity {
         this.type = type;
     }
 
+    /**
+     * Gets the affinity from the given string
+     *
+     * @param affinity The string to get the affinity from
+     * @return The affinity
+     */
     @Nullable
     public static Affinity byName(@Nullable String name) {
         return name == null ? null : Affinity.valueOf(name.toUpperCase(Locale.ROOT));

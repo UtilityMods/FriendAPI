@@ -6,6 +6,9 @@ import java.util.UUID;
 
 public class MigrationTest {
 
+    /*
+     * Test the migration of the database.
+     */
     public static void main(String[] args) {
         FriendManager friendManager = FriendManager.getInstance();
         MigrationTest migrationTest = new MigrationTest();
@@ -14,6 +17,9 @@ public class MigrationTest {
         migrationTest.migrateUuidList(friendManager);
     }
 
+    /*
+     * Migrate the username list.
+     */
     private void migrateUsernameList(FriendManager friendManager) {
         List<String> usernameList = new ArrayList<>();
         usernameList.add("olliem5");
@@ -23,6 +29,9 @@ public class MigrationTest {
         friendManager.migrateFromNameList(usernameList);
     }
 
+    /*
+     * Migrate the uuid list.
+     */
     private void migrateUuidList(FriendManager friendManager) {
         List<UUID> uuidList = new ArrayList<>();
         uuidList.add(UUID.fromString("8f2a4be6-2717-42b9-a7ed-070489b49b56"));
