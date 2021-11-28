@@ -1,7 +1,6 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        jcenter()
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
@@ -14,4 +13,5 @@ include 'FriendAPI'
 include 'FriendAPI-16'
 include 'FriendAPI-17'
 include 'FriendAPI-12'
+include 'FriendAPI-18'
 

@@ -1,0 +1,49 @@
+plugins {
+    id 'fabric-loom' version '0.10-SNAPSHOT'
+}
+
+archivesBaseName = "FriendAPI-18"
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+dependencies {
+    api project(':FriendAPI')
+    library(project(':FriendAPI')) {
+        exclude group: 'org.jetbrains', module: ''
+        exclude group: 'com.google.code.gson', module: ''
+        exclude group: 'org.apache.logging.log4j', module: ''
+    }
+
+    minecraft "com.mojang:minecraft:${project.minecraft_version_18}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings_18}:v2"
+    modApi "net.fabricmc:fabric-loader:${project.loader_version_18}"
+
+    modImplementation(include("net.fabricmc.fabric-api:fabric-api-base:0.4.1+b4f4f6cdd0"))
+    modImplementation(include("net.fabricmc.fabric-api:fabric-command-api-v1:1.1.6+3ac43d95d0"))
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+
+
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact(remapJar) {
+                builtBy remapJar
+
+            }
+        }
+    }
+}
