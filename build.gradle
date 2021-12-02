@@ -40,9 +40,7 @@ allprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                artifact jar
-                artifact sourcesJar
-
+                from components.java
             }
         }
 

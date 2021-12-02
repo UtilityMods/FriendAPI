@@ -17,10 +17,10 @@ dependencies {
 
     minecraft "com.mojang:minecraft:${project.minecraft_version_18}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings_18}:v2"
-    modApi "net.fabricmc:fabric-loader:${project.loader_version_18}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version_18}"
 
-    modImplementation(include("net.fabricmc.fabric-api:fabric-api-base:0.4.1+b4f4f6cdd0"))
-    modImplementation(include("net.fabricmc.fabric-api:fabric-command-api-v1:1.1.6+3ac43d95d0"))
+    modImplementation include(fabricApi.module("fabric-api-base", project.fabric_version_18))
+    modImplementation include(fabricApi.module("fabric-command-api-v1", project.fabric_version_18))
 }
 
 processResources {
@@ -35,15 +35,4 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 17
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact(remapJar) {
-                builtBy remapJar
-
-            }
-        }
-    }
 }

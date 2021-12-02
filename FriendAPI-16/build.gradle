@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.8-SNAPSHOT'
+    id 'fabric-loom' version '0.10-SNAPSHOT'
 }
 
 archivesBaseName = "FriendAPI-16"
@@ -18,10 +18,10 @@ dependencies {
 
     minecraft "com.mojang:minecraft:${project.minecraft_version_16}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings_16}:v2"
-    modApi "net.fabricmc:fabric-loader:${project.loader_version_16}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version_16}"
 
-    modImplementation(include("net.fabricmc.fabric-api:fabric-api-base:0.3.0+f74f7c7d7d"))
-    modImplementation(include("net.fabricmc.fabric-api:fabric-command-api-v1:1.1.2+f74f7c7d7d"))
+    modImplementation include(fabricApi.module("fabric-api-base", project.fabric_version_16))
+    modImplementation include(fabricApi.module("fabric-command-api-v1", project.fabric_version_16))
 }
 
 processResources {
@@ -32,12 +32,3 @@ processResources {
     }
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-        }
-    }
-}
