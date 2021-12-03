@@ -24,7 +24,7 @@ public enum Affinity {
     /**
      * Gets the affinity from the given string
      *
-     * @param affinity The string to get the affinity from
+     * @param name The string to get the affinity from
      * @return The affinity
      */
     @Nullable

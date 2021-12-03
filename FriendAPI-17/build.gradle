@@ -36,14 +36,3 @@ processResources {
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 16
 }
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact(remapJar) {
-                builtBy remapJar
-
-            }
-        }
-    }
-}
