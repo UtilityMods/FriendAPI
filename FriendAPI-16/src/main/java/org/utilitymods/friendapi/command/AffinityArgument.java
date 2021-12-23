@@ -6,7 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.command.CommandSource;
-import org.utilitymods.friendapi.Affinity;
+import org.utilitymods.friendapi.profiles.Affinity;
 
 import java.util.Arrays;
 import java.util.Collection;

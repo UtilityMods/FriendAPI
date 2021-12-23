@@ -1,0 +1,9 @@
+[
+  {
+    "modid": "friendapi",
+    "name": "FriendAPI",
+    "description": "This library add support for the FriendAPI which allows for the same friends across client, versions, and instances",
+    "version": "1.1.0",
+    "authorList": ["Utility Mods"]
+  }
+]

@@ -4,6 +4,8 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.8'
     api 'org.apache.logging.log4j:log4j-core:2.14.1'
     api 'org.jetbrains:annotations:22.0.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
 }
 
 
@@ -12,4 +14,8 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(8)
     }
+}
+
+test {
+    useJUnitPlatform()
 }

@@ -10,9 +10,7 @@ targetCompatibility = JavaVersion.VERSION_17
 dependencies {
     api project(':FriendAPI')
     library(project(':FriendAPI')) {
-        exclude group: 'org.jetbrains', module: ''
-        exclude group: 'com.google.code.gson', module: ''
-        exclude group: 'org.apache.logging.log4j', module: ''
+        transitive false
     }
 
     minecraft "com.mojang:minecraft:${project.minecraft_version_18}"
