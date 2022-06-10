@@ -1,7 +1,0 @@
-{
-  "commands.friendapi.already": "%s is already a %s",
-  "commands.friendapi.now": "%s is now a %s",
-  "commands.friendapi.removed": "%s has been removed",
-  "commands.friendapi.add": "add friend",
-  "commands.friendapi.remove": "removed friend"
-}

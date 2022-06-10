@@ -12,7 +12,7 @@
   },
   "entrypoints": {
     "main": [
-      "org.utilitymods.friendapi.command.FriendMod"
+      "org.utilitymods.friendapi.FriendMod"
     ]
   },
   "license": "Apache-2.0",

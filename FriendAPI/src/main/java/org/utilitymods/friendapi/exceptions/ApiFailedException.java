@@ -1,4 +1,4 @@
-package org.utilitymods.friendapi;
+package org.utilitymods.friendapi.exceptions;
 
 public class ApiFailedException extends Exception {
 

@@ -8,7 +8,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.command.CommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.LiteralTextContent;
 import org.utilitymods.friendapi.profiles.Profile;
 import org.utilitymods.friendapi.FriendManager;
 
@@ -21,7 +21,7 @@ public class FriendArgument implements ArgumentType<Profile> {
         return new FriendArgument();
     }
 
-    private final DynamicCommandExceptionType invalidArg = new DynamicCommandExceptionType(o -> new LiteralText(o + " is not a friend"));
+    private final DynamicCommandExceptionType invalidArg = new DynamicCommandExceptionType(o -> new LiteralTextContent(o + " is not a friend"));
 
     @Override
     public Profile parse(StringReader reader) throws CommandSyntaxException {

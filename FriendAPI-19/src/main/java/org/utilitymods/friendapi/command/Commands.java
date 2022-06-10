@@ -31,7 +31,7 @@ public class Commands {
                     .executes(context -> {
                         Profile player = context.getArgument("name", Profile.class);
                         FriendManager.getInstance().removeFriend(player.getUUID());
-                        context.getSource().sendFeedback(new TranslatableText("commands.friendapi.removed", player.getName()).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, COMMAND_BASE + "add " + player.getName())).withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new TranslatableText("commands.friendapi.add")))));
+                        context.getSource().sendFeedback(new TranslatableTextContent("commands.friendapi.removed", player.getName()).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, COMMAND_BASE + "add " + player.getName())).withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new TranslatableTextContent("commands.friendapi.add")))));
                         return SINGLE_SUCCESS;
                     })).build();
 
@@ -46,11 +46,11 @@ public class Commands {
     private int executeAdd(FabricClientCommandSource source, PlayerEntity player, Affinity affinity) {
         if (FriendManager.getInstance().getAffinity(player.getGameProfile().getId()).equals(affinity)) {
 
-            source.sendFeedback(new TranslatableText("commands.friendapi.already", player.getGameProfile().getName(), affinity.name().toLowerCase(Locale.ROOT)).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("%sremove %s", COMMAND_BASE, player.getGameProfile().getName()))).withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new TranslatableText("commands.friendapi.remove")))));
+            source.sendFeedback(new TranslatableTextContent("commands.friendapi.already", player.getGameProfile().getName(), affinity.name().toLowerCase(Locale.ROOT)).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("%sremove %s", COMMAND_BASE, player.getGameProfile().getName()))).withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new TranslatableTextContent("commands.friendapi.remove")))));
         } else {
             FriendManager.getInstance().addFriend(FabricProfileFactory.INSTANCE.createProfile(player, affinity));
 
-            source.sendFeedback(new TranslatableText("commands.friendapi.now", player.getGameProfile().getName(), affinity.name().toLowerCase(Locale.ROOT)).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("%sremove %s", COMMAND_BASE, player.getGameProfile().getName()))).withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new TranslatableText("commands.friendapi.remove")))));
+            source.sendFeedback(new TranslatableTextContent("commands.friendapi.now", player.getGameProfile().getName(), affinity.name().toLowerCase(Locale.ROOT)).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("%sremove %s", COMMAND_BASE, player.getGameProfile().getName()))).withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new TranslatableTextContent("commands.friendapi.remove")))));
         }
         return SINGLE_SUCCESS;
     }
@@ -65,7 +65,7 @@ public class Commands {
     }
 
     private Text getTextOfProfile(Profile profile) {
-        return new LiteralText(getGrayedLabel("Name") + profile.getName() + " " + getGrayedLabel("Affinity") + getColoredAffinity(profile.getAffinity())).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("%sremove %s", COMMAND_BASE, profile.getName()))).withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new TranslatableText("commands.friendapi.remove"))));
+        return new LiteralTextContent(getGrayedLabel("Name") + profile.getName() + " " + getGrayedLabel("Affinity") + getColoredAffinity(profile.getAffinity())).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("%sremove %s", COMMAND_BASE, profile.getName()))).withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, new TranslatableTextContent("commands.friendapi.remove"))));
     }
 
     private String getGrayedLabel(String name) {

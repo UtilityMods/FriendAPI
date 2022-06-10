@@ -1,4 +1,4 @@
-package org.utilitymods.friendapi;
+package org.utilitymods.friendapi.profiles;
 
 import org.jetbrains.annotations.Nullable;
 

@@ -9,13 +9,13 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.LiteralText;
-import org.utilitymods.friendapi.BaseProfile;
+import org.utilitymods.friendapi.profiles.Profile;
 import org.utilitymods.friendapi.FriendManager;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
-public class FriendArgument implements ArgumentType<BaseProfile> {
+public class FriendArgument implements ArgumentType<Profile> {
 
     public static FriendArgument friendArgument() {
         return new FriendArgument();
@@ -24,11 +24,11 @@ public class FriendArgument implements ArgumentType<BaseProfile> {
     private final DynamicCommandExceptionType invalidArg = new DynamicCommandExceptionType(o -> new LiteralText(o + " is not a friend"));
 
     @Override
-    public BaseProfile parse(StringReader reader) throws CommandSyntaxException {
+    public Profile parse(StringReader reader) throws CommandSyntaxException {
         String argument = reader.readString();
-        BaseProfile profile = null;
-        for (BaseProfile s : FriendManager.getInstance().getFriendMapCopy().values()) {
-            if (s.name.equalsIgnoreCase(argument)) {
+        Profile profile = null;
+        for (Profile s : FriendManager.getInstance().getFriendMapCopy().values()) {
+            if (s.getName().equalsIgnoreCase(argument)) {
                 profile = s;
                 break;
             }
@@ -39,7 +39,7 @@ public class FriendArgument implements ArgumentType<BaseProfile> {
 
     @Override
     public Collection<String> getExamples() {
-        return FriendManager.getInstance().getFriendMapCopy().values().stream().map(profile -> profile.name).toList();
+        return FriendManager.getInstance().getFriendMapCopy().values().stream().map(Profile::getName).toList();
     }
 
     @Override
