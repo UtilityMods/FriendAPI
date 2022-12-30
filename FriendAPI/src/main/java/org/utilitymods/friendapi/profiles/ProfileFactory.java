@@ -43,7 +43,6 @@ public class ProfileFactory {
             URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString().replace("-", ""));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             JsonObject jsonObject = new JsonParser().parse(new InputStreamReader(conn.getInputStream())).getAsJsonObject();
-            FriendManager.LOGGER.debug("Called Mojang API, response: " + jsonObject.toString());
             String name = jsonObject.get("name").getAsString();
             return createProfile(name, uuid, affinity);
         } catch (Exception e) {
