@@ -39,7 +39,7 @@ public class ProfileFactory {
      */
     public Profile createProfile(@NotNull UUID uuid, @NotNull Affinity affinity) throws ApiFailedException {
         try {
-            URL url = new URL("https://api.mojang.com/user/profiles/" + uuid + "/names");
+            URL url = new URL("https://api.mojang.com/user/profiles/" + uuid + "/");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             JsonArray jsonArray = new JsonParser().parse(new InputStreamReader(conn.getInputStream())).getAsJsonArray();
             String name = jsonArray.get(jsonArray.size() - 1).getAsJsonObject().get("name").getAsString();
