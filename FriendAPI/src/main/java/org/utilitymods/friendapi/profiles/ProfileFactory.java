@@ -39,10 +39,10 @@ public class ProfileFactory {
      */
     public Profile createProfile(@NotNull UUID uuid, @NotNull Affinity affinity) throws ApiFailedException {
         try {
-            URL url = new URL("https://api.mojang.com/user/profiles/" + uuid + "/");
+            URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            JsonArray jsonArray = new JsonParser().parse(new InputStreamReader(conn.getInputStream())).getAsJsonArray();
-            String name = jsonArray.get(jsonArray.size() - 1).getAsJsonObject().get("name").getAsString();
+            JsonObject jsonObject = new JsonParser().parse(new InputStreamReader(conn.getInputStream())).getAsJsonObject();
+            String name = jsonObject.get("name").getAsString();
             return createProfile(name, uuid, affinity);
         } catch (Exception e) {
             throw new ApiFailedException("no username associated with uuid:" + uuid);
