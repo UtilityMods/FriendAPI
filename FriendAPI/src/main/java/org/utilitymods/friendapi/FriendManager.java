@@ -33,7 +33,7 @@ public final class FriendManager {
     /**
      * The Logger.
      */
-    private static final Logger LOGGER = LogManager.getLogger("FriendAPI");
+    public static final Logger LOGGER = LogManager.getLogger("FriendAPI");
 
     /**
      * The constant INSTANCE of the friend manager.

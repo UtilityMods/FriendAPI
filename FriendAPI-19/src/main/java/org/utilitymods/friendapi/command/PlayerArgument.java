@@ -29,7 +29,7 @@ public class PlayerArgument implements ArgumentType<PlayerEntity> {
         PlayerEntity playerEntity = null;
         assert mc.world != null;
         for (PlayerEntity p : mc.world.getPlayers()) {
-            if (p.getDisplayName().getContent().equalsIgnoreCase(argument)) {
+            if (p.getDisplayName().getContent().toString().equalsIgnoreCase(argument)) {
                 playerEntity = p;
                 break;
             }
